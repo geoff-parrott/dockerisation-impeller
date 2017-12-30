@@ -1,0 +1,26 @@
+web:
+    image: nginx:latest
+    ports:
+        - '8080:80'
+    volumes:
+        - ./source:/code
+        - ./nginx/site.conf:/etc/nginx/conf.d/site.conf
+    links:
+        - php
+php:
+    image: php:7-fpm
+    volumes:
+        - ./source:/code
+mysql:
+    image: mariadb
+    ports:
+        - '3306:3306'
+    volumes:
+        - ./db-data:/var/lib/mysql
+    environment:
+        - MYSQL_ROOT_PASSWORD=woot
+redis:
+    image: redis
+    command: redis-server --requirepass woot
+    ports:
+        - '6379:6379'
